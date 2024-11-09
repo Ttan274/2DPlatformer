@@ -1,6 +1,5 @@
 using UnityEngine;
 
-
 //Base class for the states of player (e.g MoveState, IdleState, ...)
 public class PlayerState
 {
@@ -9,6 +8,8 @@ public class PlayerState
     protected Player player;
 
     protected float horInput;
+    protected float verInput;
+
     protected float stateTimer;
     private string animBoolName;
 
@@ -29,6 +30,7 @@ public class PlayerState
     {
         stateTimer -= Time.deltaTime;
         horInput = Input.GetAxisRaw("Horizontal");
+        verInput = Input.GetAxisRaw("Vertical");
     }
 
     public virtual void ExitState()

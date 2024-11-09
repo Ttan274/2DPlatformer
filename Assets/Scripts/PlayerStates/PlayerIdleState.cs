@@ -20,6 +20,9 @@ public class PlayerIdleState : PlayerGroundedState
     {
         base.Update();
 
+        if (horInput == player.facingDir && player.OnWall())
+            return;
+
         if (horInput != 0)
             stateMachine.ChangeState(player.moveState);
     }

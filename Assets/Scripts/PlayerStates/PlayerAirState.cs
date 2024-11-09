@@ -20,6 +20,9 @@ public class PlayerAirState : PlayerState
     {
         base.Update();
 
+        if (player.OnWall())
+            stateMachine.ChangeState(player.wallSlideState);
+
         if (player.IsGrounded())
             stateMachine.ChangeState(player.idleState);
 

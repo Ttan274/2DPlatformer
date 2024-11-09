@@ -15,7 +15,9 @@ public class Player : MonoBehaviour
 
     [Header("Collision Parameters")]
     [SerializeField] private Transform groundCheck;
+    [SerializeField] private Transform wallCheck;
     [SerializeField] private float groundCheckDistance;
+    [SerializeField] private float wallCheckDistance;
     [SerializeField] private LayerMask groundMask;
 
     //Flip Parameters
@@ -45,7 +47,7 @@ public class Player : MonoBehaviour
         airState = new PlayerAirState(this, stateMachine, "Jump");
         jumpState = new PlayerJumpState(this, stateMachine, "Jump");
         dashState = new PlayerDashState(this, stateMachine, "Jump");    //animation might be change
-        wallSlideState = new PlayerWallSlideState(this, stateMachine, "Jump");
+        wallSlideState = new PlayerWallSlideState(this, stateMachine, "Jump"); //animation might be change
         wallJumpState = new PlayerWallJumpState(this, stateMachine, "Jump");
     }
 
@@ -65,6 +67,9 @@ public class Player : MonoBehaviour
 
     private void DashInputCheck()
     {
+        if (OnWall())
+            return;
+
         if(Input.GetKeyDown(KeyCode.LeftShift))
         {
             dashDir = Input.GetAxisRaw("Horizontal");
@@ -98,11 +103,13 @@ public class Player : MonoBehaviour
     }
 
     public bool IsGrounded() => Physics2D.Raycast(groundCheck.position, Vector2.down, groundCheckDistance, groundMask);
+    public bool OnWall() => Physics2D.Raycast(wallCheck.position, Vector2.right * facingDir, wallCheckDistance, groundMask);
 
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.green
             ;
         Gizmos.DrawLine(groundCheck.position, new Vector3(groundCheck.position.x, groundCheck.position.y - groundCheckDistance));
+        Gizmos.DrawLine(wallCheck.position, new Vector3(wallCheck.position.x + wallCheckDistance, wallCheck.position.y));
     }
 }

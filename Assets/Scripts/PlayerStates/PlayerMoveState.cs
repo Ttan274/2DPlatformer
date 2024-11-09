@@ -22,7 +22,7 @@ public class PlayerMoveState : PlayerGroundedState
 
         player.SetVelocity(horInput * player.moveSpeed, player.rb.linearVelocityY);
 
-        if (horInput == 0)
+        if (horInput == 0 || player.OnWall())
             stateMachine.ChangeState(player.idleState);
     }
 }

@@ -26,7 +26,12 @@ public class PlayerWallSlideState : PlayerState
             return;
         }
 
-        if (horInput != 0 && player.facingDir != horInput)
-            stateMachine.ChangeState(player.moveState);
+        if (verInput < 0)
+            player.rb.linearVelocity = new Vector2(0, player.rb.linearVelocityY);
+        else
+            player.rb.linearVelocity = new Vector2(0, player.rb.linearVelocityY * 0.5f);
+
+        if (player.IsGrounded())
+            stateMachine.ChangeState(player.idleState);
     }
 }
