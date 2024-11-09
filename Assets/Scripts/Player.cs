@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 //Player class
@@ -24,9 +25,13 @@ public class Player : MonoBehaviour
     private bool isFacingRight = true;
     public int facingDir { get; private set; } = 1;
 
+    //Busy
+    public bool isBusy { get; private set; }
+
     //Components
     public Rigidbody2D rb { get; private set; }
     public Animator anim { get; private set; }
+    public PlayerAttack playerAttack { get; private set; }
 
     //States
     public PlayerStateMachine stateMachine { get; private set; }
@@ -37,6 +42,7 @@ public class Player : MonoBehaviour
     public PlayerDashState dashState { get; private set; }
     public PlayerWallSlideState wallSlideState { get; private set; }
     public PlayerWallJumpState wallJumpState { get; private set; }
+    public PlayerAttackState attackState { get; private set; }
 
     private void Awake()
     {
@@ -49,12 +55,14 @@ public class Player : MonoBehaviour
         dashState = new PlayerDashState(this, stateMachine, "Jump");    //animation might be change
         wallSlideState = new PlayerWallSlideState(this, stateMachine, "Jump"); //animation might be change
         wallJumpState = new PlayerWallJumpState(this, stateMachine, "Jump");
+        attackState = new PlayerAttackState(this, stateMachine, "Aim");
     }
 
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponentInChildren<Animator>();
+        playerAttack = GetComponent<PlayerAttack>();    
 
         stateMachine.Initialize(idleState);
     }
@@ -95,7 +103,7 @@ public class Player : MonoBehaviour
             Flip();
     }
 
-    private void Flip()
+    public void Flip()
     {
         isFacingRight = !isFacingRight;
         facingDir = facingDir * -1;
@@ -104,6 +112,15 @@ public class Player : MonoBehaviour
 
     public bool IsGrounded() => Physics2D.Raycast(groundCheck.position, Vector2.down, groundCheckDistance, groundMask);
     public bool OnWall() => Physics2D.Raycast(wallCheck.position, Vector2.right * facingDir, wallCheckDistance, groundMask);
+
+    public IEnumerator BusyRoutine(float seconds)
+    {
+        isBusy = true;
+
+        yield return new WaitForSeconds(seconds);
+
+        isBusy = false;
+    }
 
     private void OnDrawGizmos()
     {

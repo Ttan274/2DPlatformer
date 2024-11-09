@@ -23,7 +23,7 @@ public class PlayerIdleState : PlayerGroundedState
         if (horInput == player.facingDir && player.OnWall())
             return;
 
-        if (horInput != 0)
+        if (horInput != 0 && !player.isBusy)
             stateMachine.ChangeState(player.moveState);
     }
 }
