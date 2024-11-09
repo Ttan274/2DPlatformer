@@ -9,6 +9,7 @@ public class PlayerState
     protected Player player;
 
     protected float horInput;
+    protected float stateTimer;
     private string animBoolName;
 
     //Constructor
@@ -26,6 +27,7 @@ public class PlayerState
 
     public virtual void Update()
     {
+        stateTimer -= Time.deltaTime;
         horInput = Input.GetAxisRaw("Horizontal");
     }
 
