@@ -12,6 +12,8 @@ public class Player : MonoBehaviour
     [Header("Dash Parameters")]
     public float dashSpeed;
     public float dashDuration;
+    [SerializeField] private float dashCooldown;
+    private float dashCooldownTimer;
     public float dashDir { get; private set; } 
 
     [Header("Collision Parameters")]
@@ -20,6 +22,9 @@ public class Player : MonoBehaviour
     [SerializeField] private float groundCheckDistance;
     [SerializeField] private float wallCheckDistance;
     [SerializeField] private LayerMask groundMask;
+
+    [Header("Attack Parameters")]
+    public Vector2 attackMovement;
 
     //Flip Parameters
     private bool isFacingRight = true;
@@ -43,6 +48,7 @@ public class Player : MonoBehaviour
     public PlayerWallSlideState wallSlideState { get; private set; }
     public PlayerWallJumpState wallJumpState { get; private set; }
     public PlayerAttackState attackState { get; private set; }
+    public PlayerStrikeState strikeState { get; private set; }
 
     private void Awake()
     {
@@ -56,6 +62,7 @@ public class Player : MonoBehaviour
         wallSlideState = new PlayerWallSlideState(this, stateMachine, "Jump"); //animation might be change
         wallJumpState = new PlayerWallJumpState(this, stateMachine, "Jump");
         attackState = new PlayerAttackState(this, stateMachine, "Aim");
+        strikeState = new PlayerStrikeState(this, stateMachine, "Strike");
     }
 
     private void Start()
@@ -78,8 +85,12 @@ public class Player : MonoBehaviour
         if (OnWall())
             return;
 
-        if(Input.GetKeyDown(KeyCode.LeftShift))
+        dashCooldownTimer -= Time.deltaTime;
+
+        if(Input.GetKeyDown(KeyCode.LeftShift) && dashCooldownTimer <= 0)
         {
+            dashCooldownTimer = dashCooldown;
+
             dashDir = Input.GetAxisRaw("Horizontal");
 
             if (dashDir == 0)

@@ -24,19 +24,39 @@ public class PlayerAttack : MonoBehaviour
     private void Update()
     {
         if(Input.GetKey(KeyCode.Mouse1))
+            SetDotsPos();
+    }
+
+    #region Dots
+    private void GenerateDots()
+    {
+        dots = new GameObject[numberOfDots];
+
+        for (int i = 0; i < numberOfDots; i++)
         {
-            for (int i = 0; i < dots.Length; i++)
-            {
-                dots[i].transform.position = SetDotsPos(i * spaceBetweenDots);
-            }
+            dots[i] = Instantiate(dotPrefab, attackPoint.position, Quaternion.identity, dotsParent);
+            dots[i].SetActive(false);
         }
     }
 
-    private Vector2 SetDotsPos(float p)
+    private void SetDotsPos()
     {
-        return (Vector2)player.transform.position + MouseAim() * p * 5f;
+        for (int i = 0; i < dots.Length; i++)
+        {
+            dots[i].transform.position = (Vector2)attackPoint.position + MouseAim() * (i * spaceBetweenDots) * 5f;
+        }
     }
 
+    public void ChangeDotVisibility(bool x)
+    {
+        foreach (GameObject d in dots)
+        {
+            d.SetActive(x);
+        }
+    }
+
+    #endregion
+  
     private Vector2 MouseAim()
     {
         Vector2 playerPos = player.transform.position;
@@ -44,25 +64,6 @@ public class PlayerAttack : MonoBehaviour
         Vector2 direction = mousePos - playerPos;
 
         return direction.normalized;
-    }
-
-    private void GenerateDots()
-    {
-        dots = new GameObject[numberOfDots];
-
-        for (int i = 0; i < numberOfDots; i++)
-        {
-            dots[i] = Instantiate(dotPrefab, player.transform.position, Quaternion.identity, dotsParent);
-            dots[i].SetActive(false);
-        }
-    }
-
-    public void ChangeDotVisibility(bool x)
-    {
-        foreach(GameObject d in dots)
-        {
-            d.SetActive(x);
-        }
     }
 
     public void ShootFireball()
