@@ -5,6 +5,7 @@ public class Projectile : MonoBehaviour
     private Vector3 attackDirection;
     [SerializeField] private float speed;
     [SerializeField] private BulletType type;
+    [SerializeField] private float damage;
     private bool isHit;
 
     private void Start()
@@ -47,15 +48,15 @@ public class Projectile : MonoBehaviour
                 {
                     isHit = true;
                     Destroy(gameObject);
-                    //Damage at
+                    other.GetComponent<EnemyTurret>().TakeDamage(damage);
                 }
                 break;
             case BulletType.Turret:
-                if (other.gameObject.CompareTag("Player"))
+                if (other.gameObject.CompareTag("Player") && !other.GetComponent<Player>().isDead)
                 {
                     isHit = true;
                     Destroy(gameObject);
-                    //Damage at
+                    other.GetComponent<Player>().TakeDamage(damage);
                 }
                 break;
             default:

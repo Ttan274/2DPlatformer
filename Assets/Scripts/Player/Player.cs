@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 
 //Player class
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, IHealth
 {
     [Header("Move Parameters")]
     public float moveSpeed;
@@ -25,6 +25,11 @@ public class Player : MonoBehaviour
 
     [Header("Attack Parameters")]
     public Vector2 attackMovement;
+
+    [Header("Health Parameters")]
+    [SerializeField] private float maxHealth;
+    public float currentHealth { get; set; }
+    public bool isDead { get; private set; }
 
     //Flip Parameters
     private bool isFacingRight = true;
@@ -49,6 +54,9 @@ public class Player : MonoBehaviour
     public PlayerWallJumpState wallJumpState { get; private set; }
     public PlayerAttackState attackState { get; private set; }
     public PlayerStrikeState strikeState { get; private set; }
+    public PlayerDeadState deadState { get; private set; }
+    
+    
 
     private void Awake()
     {
@@ -63,13 +71,15 @@ public class Player : MonoBehaviour
         wallJumpState = new PlayerWallJumpState(this, stateMachine, "Jump");
         attackState = new PlayerAttackState(this, stateMachine, "Aim");
         strikeState = new PlayerStrikeState(this, stateMachine, "Strike");
+        deadState = new PlayerDeadState(this, stateMachine, "Die");
     }
 
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponentInChildren<Animator>();
-        playerAttack = GetComponent<PlayerAttack>();    
+        playerAttack = GetComponent<PlayerAttack>();
+        currentHealth = maxHealth;
 
         stateMachine.Initialize(idleState);
     }
@@ -127,9 +137,7 @@ public class Player : MonoBehaviour
     public IEnumerator BusyRoutine(float seconds)
     {
         isBusy = true;
-
         yield return new WaitForSeconds(seconds);
-
         isBusy = false;
     }
 
@@ -139,5 +147,19 @@ public class Player : MonoBehaviour
             ;
         Gizmos.DrawLine(groundCheck.position, new Vector3(groundCheck.position.x, groundCheck.position.y - groundCheckDistance));
         Gizmos.DrawLine(wallCheck.position, new Vector3(wallCheck.position.x + wallCheckDistance, wallCheck.position.y));
+    }
+
+    public void TakeDamage(float damage)
+    {
+        currentHealth -= damage;
+
+        if (currentHealth <= 0)
+            Die();
+    }
+
+    public void Die()
+    {
+        isDead = true;
+        stateMachine.ChangeState(deadState);
     }
 }
