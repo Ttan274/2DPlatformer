@@ -28,6 +28,8 @@ public class Player : MonoBehaviour, IHealth
 
     [Header("Health Parameters")]
     [SerializeField] private float maxHealth;
+    [SerializeField] private Vector2 knockback;
+    [SerializeField] private float knockbackDuration;
     public float currentHealth { get; set; }
     public bool isDead { get; private set; }
 
@@ -152,9 +154,16 @@ public class Player : MonoBehaviour, IHealth
     public void TakeDamage(float damage)
     {
         currentHealth -= damage;
+        StartCoroutine("HitRoutine");
 
         if (currentHealth <= 0)
             Die();
+    }
+
+    private IEnumerator HitRoutine()
+    {
+        rb.linearVelocity = new Vector2(knockback.x * -facingDir, knockback.y);
+        yield return new WaitForSeconds(knockbackDuration);
     }
 
     public void Die()

@@ -14,6 +14,8 @@ public class EnemyTurret : MonoBehaviour, IHealth
     private float attackCooldownTimer = Mathf.Infinity;
     [SerializeField] private GameObject bullet;
     [SerializeField] private Transform attackPoint;
+    [SerializeField] private bool isRightTurret;
+    private Vector3 attackDir;
 
     [Header("Health Parameters")]
     [SerializeField] private float maxHealth;
@@ -23,6 +25,7 @@ public class EnemyTurret : MonoBehaviour, IHealth
     private void Start()
     {
         currentHealth = maxHealth;
+        attackDir = isRightTurret ? Vector3.right : Vector3.left;
     }
 
     private void Update()
@@ -34,7 +37,7 @@ public class EnemyTurret : MonoBehaviour, IHealth
             if(attackCooldownTimer >= attackCooldown)
             {
                 attackCooldownTimer = 0;
-                Instantiate(bullet, attackPoint.position, Quaternion.identity).GetComponent<Projectile>().SetupDirection(Vector3.right);
+                Instantiate(bullet, attackPoint.position, Quaternion.identity).GetComponent<Projectile>().SetupDirection(attackDir);
             }
         }
     }
