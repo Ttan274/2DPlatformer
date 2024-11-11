@@ -1,9 +1,10 @@
+using Mono.Cecil;
 using System;
 using System.Collections;
 using UnityEngine;
 
 //Player class
-public class Player : MonoBehaviour, IHealth
+public class Player : Entity, IHealth
 {
     [Header("Move Parameters")]
     public float moveSpeed;
@@ -16,13 +17,6 @@ public class Player : MonoBehaviour, IHealth
     private float dashCooldownTimer;
     public float dashDir { get; private set; } 
 
-    [Header("Collision Parameters")]
-    [SerializeField] private Transform groundCheck;
-    [SerializeField] private Transform wallCheck;
-    [SerializeField] private float groundCheckDistance;
-    [SerializeField] private float wallCheckDistance;
-    [SerializeField] private LayerMask groundMask;
-
     [Header("Attack Parameters")]
     public Vector2 attackMovement;
 
@@ -33,16 +27,10 @@ public class Player : MonoBehaviour, IHealth
     public float currentHealth { get; set; }
     public bool isDead { get; private set; }
 
-    //Flip Parameters
-    private bool isFacingRight = true;
-    public int facingDir { get; private set; } = 1;
-
     //Busy
     public bool isBusy { get; private set; }
 
     //Components
-    public Rigidbody2D rb { get; private set; }
-    public Animator anim { get; private set; }
     public PlayerAttack playerAttack { get; private set; }
 
     //States
@@ -57,11 +45,10 @@ public class Player : MonoBehaviour, IHealth
     public PlayerAttackState attackState { get; private set; }
     public PlayerStrikeState strikeState { get; private set; }
     public PlayerDeadState deadState { get; private set; }
-    
-    
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         stateMachine = new PlayerStateMachine();
 
         idleState = new PlayerIdleState(this, stateMachine, "Idle");
@@ -76,18 +63,18 @@ public class Player : MonoBehaviour, IHealth
         deadState = new PlayerDeadState(this, stateMachine, "Die");
     }
 
-    private void Start()
+    protected override void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
-        anim = GetComponentInChildren<Animator>();
+        base.Start();
         playerAttack = GetComponent<PlayerAttack>();
         currentHealth = maxHealth;
 
         stateMachine.Initialize(idleState);
     }
 
-    private void Update()
+    protected override void Update()
     {
+        base.Update();
         stateMachine.currentState.Update();
         DashInputCheck();
     }
@@ -112,30 +99,6 @@ public class Player : MonoBehaviour, IHealth
         }
     }
 
-    public void SetVelocity(float horVelocity, float verVelocity)
-    {
-        rb.linearVelocity = new Vector2(horVelocity, verVelocity);
-        FlipController(horVelocity);
-    }
-
-    private void FlipController(float horVelocity)
-    {
-        if (horVelocity > 0 && !isFacingRight)
-            Flip();
-        else if (horVelocity < 0 && isFacingRight)
-            Flip();
-    }
-
-    public void Flip()
-    {
-        isFacingRight = !isFacingRight;
-        facingDir = facingDir * -1;
-        transform.Rotate(0, 180, 0);
-    }
-
-    public bool IsGrounded() => Physics2D.Raycast(groundCheck.position, Vector2.down, groundCheckDistance, groundMask);
-    public bool OnWall() => Physics2D.Raycast(wallCheck.position, Vector2.right * facingDir, wallCheckDistance, groundMask);
-
     public IEnumerator BusyRoutine(float seconds)
     {
         isBusy = true;
@@ -143,14 +106,13 @@ public class Player : MonoBehaviour, IHealth
         isBusy = false;
     }
 
-    private void OnDrawGizmos()
+    private IEnumerator HitRoutine()
     {
-        Gizmos.color = Color.green
-            ;
-        Gizmos.DrawLine(groundCheck.position, new Vector3(groundCheck.position.x, groundCheck.position.y - groundCheckDistance));
-        Gizmos.DrawLine(wallCheck.position, new Vector3(wallCheck.position.x + wallCheckDistance, wallCheck.position.y));
+        rb.linearVelocity = new Vector2(knockback.x * -facingDir, knockback.y);
+        yield return new WaitForSeconds(knockbackDuration);
     }
-
+    
+    //Health related methods
     public void TakeDamage(float damage)
     {
         currentHealth -= damage;
@@ -158,12 +120,6 @@ public class Player : MonoBehaviour, IHealth
 
         if (currentHealth <= 0)
             Die();
-    }
-
-    private IEnumerator HitRoutine()
-    {
-        rb.linearVelocity = new Vector2(knockback.x * -facingDir, knockback.y);
-        yield return new WaitForSeconds(knockbackDuration);
     }
 
     public void Die()
