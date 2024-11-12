@@ -3,6 +3,7 @@ using UnityEngine;
 public class EnemyKnightGroundedState : EnemyState
 {
     protected EnemyKnight knight;
+    protected Transform player;
 
     public EnemyKnightGroundedState(Enemy _enemy, EnemyStateMachine _stateMachine, string _animBoolName, EnemyKnight _knight) : base(_enemy, _stateMachine, _animBoolName)
     {
@@ -12,6 +13,7 @@ public class EnemyKnightGroundedState : EnemyState
     public override void EnterState()
     {
         base.EnterState();
+        player = PlayerManager.instance.player.transform;
     }
 
     public override void ExitState()
@@ -23,6 +25,7 @@ public class EnemyKnightGroundedState : EnemyState
     {
         base.Update();
 
-        //check for player cause we are going to enter attack state from here
+        if (knight.IsPlayerDetected())
+            stateMachine.ChangeState(knight.battleState);
     }
 }

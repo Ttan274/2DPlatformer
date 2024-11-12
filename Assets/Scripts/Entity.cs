@@ -11,11 +11,11 @@ public class Entity : MonoBehaviour
     public int facingDir { get; private set; } = 1;
 
     [Header("Collision Detection Properties")]
-    [SerializeField] private Transform groundCheck;
-    [SerializeField] private Transform wallCheck;
-    [SerializeField] private float groundCheckDistance;
-    [SerializeField] private float wallCheckDistance;
-    [SerializeField] private LayerMask groundMask;
+    [SerializeField] protected Transform groundCheck;
+    [SerializeField] protected Transform wallCheck;
+    [SerializeField] protected float groundCheckDistance;
+    [SerializeField] protected float wallCheckDistance;
+    [SerializeField] protected LayerMask groundMask;
 
     protected virtual void Awake()
     {
