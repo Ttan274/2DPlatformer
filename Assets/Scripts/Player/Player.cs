@@ -22,8 +22,6 @@ public class Player : Entity, IHealth
 
     [Header("Health Parameters")]
     [SerializeField] private float maxHealth;
-    [SerializeField] private Vector2 knockback;
-    [SerializeField] private float knockbackDuration;
     public float currentHealth { get; set; }
     public bool isDead { get; private set; }
 
@@ -106,17 +104,12 @@ public class Player : Entity, IHealth
         isBusy = false;
     }
 
-    private IEnumerator HitRoutine()
-    {
-        rb.linearVelocity = new Vector2(knockback.x * -facingDir, knockback.y);
-        yield return new WaitForSeconds(knockbackDuration);
-    }
-    
+ 
     //Health related methods
     public void TakeDamage(float damage)
     {
         currentHealth -= damage;
-        StartCoroutine("HitRoutine");
+        //StartCoroutine("HitRoutine");
 
         if (currentHealth <= 0)
             Die();

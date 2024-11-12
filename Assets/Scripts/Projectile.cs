@@ -44,12 +44,16 @@ public class Projectile : MonoBehaviour
         switch (type)
         {
             case BulletType.Player:
+                //Enemy Turret
                 if (other.gameObject.CompareTag("Enemy"))
                 {
                     isHit = true;
                     Destroy(gameObject);
                     other.GetComponent<EnemyTurret>().TakeDamage(damage);
+                    //other.GetComponent<Enemy>().StartFX();
                 }
+                //Enemy
+                //...
                 break;
             case BulletType.Turret:
                 if (other.gameObject.CompareTag("Player") && !other.GetComponent<Player>().isDead)
@@ -57,6 +61,7 @@ public class Projectile : MonoBehaviour
                     isHit = true;
                     Destroy(gameObject);
                     other.GetComponent<Player>().TakeDamage(damage);
+                    other.GetComponent<Player>().StartFX();
                 }
                 break;
             default:
