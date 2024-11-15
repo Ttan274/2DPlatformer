@@ -17,9 +17,7 @@ public class PlayerAnimTrigger : MonoBehaviour
         {
             if(c.GetComponent<Enemy>() != null)
             {
-                c.GetComponent<Enemy>().StartFX();
-                c.GetComponent<Enemy>().DamageImpact();
-                //Damage at
+                c.GetComponent<Enemy>().DamageBehaviour(player.damage);
             }
         }
     }

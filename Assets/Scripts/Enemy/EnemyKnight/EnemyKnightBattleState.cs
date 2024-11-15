@@ -3,7 +3,7 @@ using UnityEngine;
 public class EnemyKnightBattleState : EnemyState
 {
     private EnemyKnight knight;
-    private Transform player;
+    private Player player;
     private int moveDir;
 
     public EnemyKnightBattleState(Enemy _enemy, EnemyStateMachine _stateMachine, string _animBoolName, EnemyKnight _knight) : base(_enemy, _stateMachine, _animBoolName)
@@ -14,7 +14,7 @@ public class EnemyKnightBattleState : EnemyState
     public override void EnterState()
     {
         base.EnterState();
-        player = PlayerManager.instance.player.transform;
+        player = PlayerManager.instance.player;
     }
 
     public override void ExitState()
@@ -25,6 +25,9 @@ public class EnemyKnightBattleState : EnemyState
     public override void Update()
     {
         base.Update();
+
+        if (player.isDead)
+            stateMachine.ChangeState(knight.idleState);
 
         if(knight.IsPlayerDetected().collider != null)
         {
@@ -37,12 +40,12 @@ public class EnemyKnightBattleState : EnemyState
         }
         else
         {
-            if (stateTimer < 0 || Vector2.Distance(knight.transform.position, player.position) > 8f)
+            if (stateTimer < 0 || Vector2.Distance(knight.transform.position, player.transform.position) > 8f)
                 stateMachine.ChangeState(knight.idleState);
         }
         
         //Movement
-        if (player.position.x > knight.transform.position.x)
+        if (player.transform.position.x > knight.transform.position.x)
             moveDir = 1;
         else
             moveDir = -1;

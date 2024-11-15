@@ -1,10 +1,8 @@
-using Mono.Cecil;
-using System;
 using System.Collections;
 using UnityEngine;
 
 //Player class
-public class Player : Entity, IHealth
+public class Player : Entity
 {
     [Header("Move Parameters")]
     public float moveSpeed;
@@ -19,11 +17,6 @@ public class Player : Entity, IHealth
 
     [Header("Attack Parameters")]
     public Vector2 attackMovement;
-
-    [Header("Health Parameters")]
-    [SerializeField] private float maxHealth;
-    public float currentHealth { get; set; }
-    public bool isDead { get; private set; }
 
     //Busy
     public bool isBusy { get; private set; }
@@ -65,7 +58,6 @@ public class Player : Entity, IHealth
     {
         base.Start();
         playerAttack = GetComponent<PlayerAttack>();
-        currentHealth = maxHealth;
 
         stateMachine.Initialize(idleState);
     }
@@ -104,20 +96,9 @@ public class Player : Entity, IHealth
         isBusy = false;
     }
 
- 
-    //Health related methods
-    public void TakeDamage(float damage)
+    public override void Die()
     {
-        currentHealth -= damage;
-        //StartCoroutine("HitRoutine");
-
-        if (currentHealth <= 0)
-            Die();
-    }
-
-    public void Die()
-    {
-        isDead = true;
+        base.Die();
         stateMachine.ChangeState(deadState);
     }
 }

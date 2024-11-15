@@ -11,6 +11,9 @@ public class Enemy : Entity
     [HideInInspector] public float lastTimeAttacked;
     [SerializeField] private LayerMask playerLayer;
 
+    //Anim data
+    public string lastAnimBoolName { get; private set; }
+
     //States
     public EnemyStateMachine stateMachine { get; private set; }
 
@@ -33,4 +36,5 @@ public class Enemy : Entity
 
     public virtual RaycastHit2D IsPlayerDetected() => Physics2D.Raycast(wallCheck.position, Vector2.right * facingDir, 20f, playerLayer);
     public virtual void AnimationTrigger() => stateMachine.currentState.FinishAnimationTrigger();
+    public virtual void AssignLastAnimName(string _name) => lastAnimBoolName = _name;
 }

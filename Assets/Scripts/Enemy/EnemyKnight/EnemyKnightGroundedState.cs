@@ -3,7 +3,7 @@ using UnityEngine;
 public class EnemyKnightGroundedState : EnemyState
 {
     protected EnemyKnight knight;
-    protected Transform player;
+    protected Player player;
 
     public EnemyKnightGroundedState(Enemy _enemy, EnemyStateMachine _stateMachine, string _animBoolName, EnemyKnight _knight) : base(_enemy, _stateMachine, _animBoolName)
     {
@@ -13,7 +13,7 @@ public class EnemyKnightGroundedState : EnemyState
     public override void EnterState()
     {
         base.EnterState();
-        player = PlayerManager.instance.player.transform;
+        player = PlayerManager.instance.player;
     }
 
     public override void ExitState()
@@ -25,7 +25,7 @@ public class EnemyKnightGroundedState : EnemyState
     {
         base.Update();
 
-        if (knight.IsPlayerDetected())
+        if (knight.IsPlayerDetected() && !player.isDead)
             stateMachine.ChangeState(knight.battleState);
     }
 }

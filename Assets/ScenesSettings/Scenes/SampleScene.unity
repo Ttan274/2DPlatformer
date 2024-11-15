@@ -533,6 +533,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f3397785a8cc7e4e85da14fa5578449, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damage: 10
+  maxHealth: 200
   groundCheck: {fileID: 872935506}
   wallCheck: {fileID: 256715907}
   attackCheck: {fileID: 187054785}
@@ -553,7 +555,6 @@ MonoBehaviour:
   dashDuration: 0.2
   dashCooldown: 2
   attackMovement: {x: 2, y: 5}
-  maxHealth: 200
 --- !u!114 &52987405
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1136,6 +1137,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07ec700880a4e9c4f9d0cda87d5b10bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damage: 50
+  maxHealth: 40
   groundCheck: {fileID: 495820960}
   wallCheck: {fileID: 572282518}
   attackCheck: {fileID: 1359334765}
@@ -1159,6 +1162,7 @@ MonoBehaviour:
   playerLayer:
     serializedVersion: 2
     m_Bits: 128
+  coll: {fileID: 610604077}
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0

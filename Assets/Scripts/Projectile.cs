@@ -45,23 +45,26 @@ public class Projectile : MonoBehaviour
         {
             case BulletType.Player:
                 //Enemy Turret
-                if (other.gameObject.CompareTag("Enemy"))
+                if (other.gameObject.CompareTag("EnemyTurret"))
                 {
                     isHit = true;
                     Destroy(gameObject);
                     other.GetComponent<EnemyTurret>().TakeDamage(damage);
-                    //other.GetComponent<Enemy>().StartFX();
                 }
                 //Enemy
-                //...
+                if (other.gameObject.CompareTag("Enemy"))
+                {
+                    isHit = true;
+                    Destroy(gameObject);
+                    other.GetComponent<Enemy>().DamageBehaviour(damage);
+                }
                 break;
             case BulletType.Turret:
                 if (other.gameObject.CompareTag("Player") && !other.GetComponent<Player>().isDead)
                 {
                     isHit = true;
                     Destroy(gameObject);
-                    other.GetComponent<Player>().TakeDamage(damage);
-                    other.GetComponent<Player>().StartFX();
+                    other.GetComponent<Player>().DamageBehaviour(damage);
                 }
                 break;
             default:

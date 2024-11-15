@@ -14,9 +14,7 @@ public class KnightAnimTrigger : MonoBehaviour
         {
             if (c.GetComponent<Player>() != null)
             {
-                c.GetComponent<Player>().StartFX();
-                c.GetComponent<Player>().DamageImpact();
-                //Damage at
+                c.GetComponent<Player>().DamageBehaviour(knight.damage);
             }
         }
     }

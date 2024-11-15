@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class Entity : MonoBehaviour
+public class Entity : MonoBehaviour, IHealth
 {
     //Components
     public Animator anim {  get; private set; }
@@ -11,6 +11,12 @@ public class Entity : MonoBehaviour
     //Flip Parameters
     private bool isFacingRight = true;
     public int facingDir { get; private set; } = 1;
+
+    //Health Parameters
+    public float damage;
+    [SerializeField] private float maxHealth;
+    public float currentHealth { get; set; }
+    public bool isDead { get; private set; }
 
     [Header("Collision Detection Properties")]
     [SerializeField] protected Transform groundCheck;
@@ -43,6 +49,7 @@ public class Entity : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponentInChildren<SpriteRenderer>();
         originalMat = sr.material;
+        currentHealth = maxHealth;
     }
 
     protected virtual void Update()
@@ -80,7 +87,13 @@ public class Entity : MonoBehaviour
         transform.Rotate(0, 180, 0);
     }
 
-    public virtual void DamageImpact() => StartCoroutine("HitRoutine");
+    //Damage Behaviour
+    public virtual void DamageBehaviour(float _damage)
+    {
+        StartCoroutine("HitRoutine");
+        StartCoroutine("FlashFX");  //Maybe we dont use this
+        TakeDamage(_damage);
+    }
 
     private IEnumerator HitRoutine()
     {
@@ -91,8 +104,6 @@ public class Entity : MonoBehaviour
 
         isKnocked = false;
     }
-
-    public virtual void StartFX() => StartCoroutine("FlashFX");
 
     private IEnumerator FlashFX()
     {
@@ -113,5 +124,20 @@ public class Entity : MonoBehaviour
         Gizmos.DrawLine(wallCheck.position, new Vector3(wallCheck.position.x + wallCheckDistance * facingDir, wallCheck.position.y));
         Gizmos.color = Color.black;
         Gizmos.DrawWireSphere(attackCheck.position, attackCheckRadius);
+    }
+
+    //Health Methods
+    public virtual void TakeDamage(float _damage)
+    {
+        currentHealth -= _damage;
+
+        Debug.Log(currentHealth + "--" + gameObject.name);
+        if (currentHealth <= 0)
+            Die();
+    }
+
+    public virtual void Die()
+    {
+        isDead = true;
     }
 }
