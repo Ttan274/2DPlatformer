@@ -11,12 +11,14 @@ public class Entity : MonoBehaviour, IHealth
     //Flip Parameters
     private bool isFacingRight = true;
     public int facingDir { get; private set; } = 1;
+    public System.Action onFlipped;
 
     //Health Parameters
     public float damage;
-    [SerializeField] private float maxHealth;
+    public float maxHealth;
     public float currentHealth { get; set; }
     public bool isDead { get; private set; }
+    public System.Action onHealthChange;
 
     [Header("Collision Detection Properties")]
     [SerializeField] protected Transform groundCheck;
@@ -85,6 +87,9 @@ public class Entity : MonoBehaviour, IHealth
         isFacingRight = !isFacingRight;
         facingDir = facingDir * -1;
         transform.Rotate(0, 180, 0);
+
+        if (onFlipped != null)
+            onFlipped.Invoke();
     }
 
     //Damage Behaviour
@@ -131,7 +136,9 @@ public class Entity : MonoBehaviour, IHealth
     {
         currentHealth -= _damage;
 
-        Debug.Log(currentHealth + "--" + gameObject.name);
+        if (onHealthChange != null)
+            onHealthChange.Invoke();
+
         if (currentHealth <= 0)
             Die();
     }

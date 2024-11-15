@@ -1,5 +1,5 @@
-using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EnemyTurret : MonoBehaviour, IHealth
 {
@@ -19,6 +19,7 @@ public class EnemyTurret : MonoBehaviour, IHealth
 
     [Header("Health Parameters")]
     [SerializeField] private float maxHealth;
+    [SerializeField] private Slider slider;
     [SerializeField] private GameObject explosionPrefab;
     public float currentHealth { get; set; }
 
@@ -60,9 +61,16 @@ public class EnemyTurret : MonoBehaviour, IHealth
     public void TakeDamage(float damage)
     {
         currentHealth -= damage;
+        UpdateHealth();
 
         if (currentHealth <= 0)
             Die();
+    }
+
+    private void UpdateHealth()
+    {
+        slider.maxValue = maxHealth;
+        slider.value = currentHealth;
     }
 
     public void Die()
