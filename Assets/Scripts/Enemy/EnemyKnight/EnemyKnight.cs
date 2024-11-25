@@ -40,5 +40,6 @@ public class EnemyKnight : Enemy
     {
         base.Die();
         stateMachine.ChangeState(deadState);
+        drop.DropItem();
     }
 }

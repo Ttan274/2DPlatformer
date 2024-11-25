@@ -18,6 +18,10 @@ public class Player : Entity
     [Header("Attack Parameters")]
     public Vector2 attackMovement;
 
+    //Gold Parameters
+    public int goldCounter {get; private set; }
+    public System.Action onGoldCollected;
+
     //Busy
     public bool isBusy { get; private set; }
 
@@ -46,8 +50,8 @@ public class Player : Entity
         moveState = new PlayerMoveState(this, stateMachine, "Move");
         airState = new PlayerAirState(this, stateMachine, "Jump");
         jumpState = new PlayerJumpState(this, stateMachine, "Jump");
-        dashState = new PlayerDashState(this, stateMachine, "Jump");    //animation might be change
-        wallSlideState = new PlayerWallSlideState(this, stateMachine, "Jump"); //animation might be change
+        dashState = new PlayerDashState(this, stateMachine, "Jump");                //animation might be change
+        wallSlideState = new PlayerWallSlideState(this, stateMachine, "Jump");      //animation might be change
         wallJumpState = new PlayerWallJumpState(this, stateMachine, "Jump");
         attackState = new PlayerAttackState(this, stateMachine, "Aim");
         strikeState = new PlayerStrikeState(this, stateMachine, "Strike");
@@ -58,6 +62,7 @@ public class Player : Entity
     {
         base.Start();
         playerAttack = GetComponent<PlayerAttack>();
+        goldCounter = 0;
 
         stateMachine.Initialize(idleState);
     }
@@ -100,5 +105,15 @@ public class Player : Entity
     {
         base.Die();
         stateMachine.ChangeState(deadState);
+    }
+
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.gameObject.CompareTag("Gold"))
+        {
+            Destroy(other.gameObject);
+            goldCounter++;
+            onGoldCollected?.Invoke();
+        }
     }
 }

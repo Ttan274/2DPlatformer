@@ -13,6 +13,9 @@ public class Enemy : Entity
 
     //Anim data
     public string lastAnimBoolName { get; private set; }
+    
+    //Component
+    protected EnemyDrop drop {  get; private set; }
 
     //States
     public EnemyStateMachine stateMachine { get; private set; }
@@ -26,6 +29,7 @@ public class Enemy : Entity
     protected override void Start()
     {
         base.Start();
+        drop = GetComponent<EnemyDrop>();
     }
 
     protected override void Update()
