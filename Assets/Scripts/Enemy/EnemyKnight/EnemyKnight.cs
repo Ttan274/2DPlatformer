@@ -18,7 +18,7 @@ public class EnemyKnight : Enemy
         moveState = new EnemyKnightMoveState(this, stateMachine, "Move", this);
         battleState = new EnemyKnightBattleState(this, stateMachine, "Move", this);
         attackState = new EnemyKnightAttackState(this, stateMachine, "Attack", this);
-        deadState = new EnemyKnightDeadState(this, stateMachine, "Idle", this); //Animation might be change
+        deadState = new EnemyKnightDeadState(this, stateMachine, "Idle", this);
     }
 
     protected override void Start()
@@ -31,7 +31,6 @@ public class EnemyKnight : Enemy
     {
         base.Update();
 
-        //Can be control from enemy manager (later)??
         if(transform.position.y <= -20f)
             Destroy(gameObject);
     }
@@ -40,6 +39,19 @@ public class EnemyKnight : Enemy
     {
         base.Die();
         stateMachine.ChangeState(deadState);
-        drop.DropItem();
+        ItemDrop();
+    }
+
+    protected override void ItemDrop()
+    {
+        base.ItemDrop();
+
+        for (int i = 0; i < dropSize; i++)
+        {
+            //Burasý düzenlenebilir
+            GameObject newObject = Instantiate(goldPrefab, transform.position, Quaternion.identity);
+            newObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(Random.Range(-5, 5), Random.Range(5, 15)));
+        }
+
     }
 }

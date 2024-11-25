@@ -1253,7 +1253,6 @@ GameObject:
   - component: {fileID: 610604077}
   - component: {fileID: 610604076}
   - component: {fileID: 610604078}
-  - component: {fileID: 610604079}
   m_Layer: 8
   m_Name: Knight
   m_TagString: Enemy
@@ -1391,20 +1390,9 @@ MonoBehaviour:
   playerLayer:
     serializedVersion: 2
     m_Bits: 128
-  coll: {fileID: 610604077}
---- !u!114 &610604079
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 610604074}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ed3cdd299e90f549a4aa3f07b81a18c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
   goldPrefab: {fileID: 6419953778803564615, guid: 677a68d6d34dc9c4eb9333ef8b53effe, type: 3}
+  dropSize: 3
+  coll: {fileID: 610604077}
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0

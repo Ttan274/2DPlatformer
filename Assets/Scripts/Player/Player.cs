@@ -109,6 +109,7 @@ public class Player : Entity
 
     private void OnCollisionEnter2D(Collision2D other)
     {
+        //Gold Collection
         if (other.gameObject.CompareTag("Gold"))
         {
             Destroy(other.gameObject);
