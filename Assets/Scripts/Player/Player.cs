@@ -18,10 +18,6 @@ public class Player : Entity
     [Header("Attack Parameters")]
     public Vector2 attackMovement;
 
-    //Gold Parameters
-    public int goldCounter {get; private set; }
-    public System.Action onGoldCollected;
-
     //Busy
     public bool isBusy { get; private set; }
 
@@ -62,7 +58,6 @@ public class Player : Entity
     {
         base.Start();
         playerAttack = GetComponent<PlayerAttack>();
-        goldCounter = 0;
 
         stateMachine.Initialize(idleState);
     }
@@ -105,16 +100,5 @@ public class Player : Entity
     {
         base.Die();
         stateMachine.ChangeState(deadState);
-    }
-
-    private void OnCollisionEnter2D(Collision2D other)
-    {
-        //Gold Collection
-        if (other.gameObject.CompareTag("Gold"))
-        {
-            Destroy(other.gameObject);
-            goldCounter++;
-            onGoldCollected?.Invoke();
-        }
     }
 }

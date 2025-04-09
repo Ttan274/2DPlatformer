@@ -11,10 +11,6 @@ public class Enemy : Entity
     [HideInInspector] public float lastTimeAttacked;
     [SerializeField] private LayerMask playerLayer;
 
-    [Header("Drop Parameters")]
-    [SerializeField] protected GameObject goldPrefab;
-    [SerializeField] protected int dropSize;
-
     //Anim data
     public string lastAnimBoolName { get; private set; }
 
@@ -36,11 +32,6 @@ public class Enemy : Entity
     {
         base.Update();
         stateMachine.currentState.Update();
-    }
-
-    protected virtual void ItemDrop()
-    {
-
     }
 
     public virtual RaycastHit2D IsPlayerDetected() => Physics2D.Raycast(wallCheck.position, Vector2.right * facingDir, 20f, playerLayer);

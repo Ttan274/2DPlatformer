@@ -35,8 +35,8 @@ public class PlayerAttack : MonoBehaviour
         for (int i = 0; i < numberOfDots; i++)
         {
             dots[i] = Instantiate(dotPrefab, attackPoint.position, Quaternion.identity, dotsParent);
-            dots[i].SetActive(false);
         }
+        ChangeDotVisibility(false);
     }
 
     private void SetDotsPos()

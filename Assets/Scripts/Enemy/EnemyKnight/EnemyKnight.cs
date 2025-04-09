@@ -39,19 +39,5 @@ public class EnemyKnight : Enemy
     {
         base.Die();
         stateMachine.ChangeState(deadState);
-        ItemDrop();
-    }
-
-    protected override void ItemDrop()
-    {
-        base.ItemDrop();
-
-        for (int i = 0; i < dropSize; i++)
-        {
-            //Burasý düzenlenebilir
-            GameObject newObject = Instantiate(goldPrefab, transform.position, Quaternion.identity);
-            newObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(Random.Range(-5, 5), Random.Range(5, 15)));
-        }
-
     }
 }

@@ -7,7 +7,7 @@ public class Entity : MonoBehaviour, IHealth
     public Animator anim {  get; private set; }
     public Rigidbody2D rb { get; private set; }
     public SpriteRenderer sr { get; private set; }
-
+    
     //Flip Parameters
     private bool isFacingRight = true;
     public int facingDir { get; private set; } = 1;
