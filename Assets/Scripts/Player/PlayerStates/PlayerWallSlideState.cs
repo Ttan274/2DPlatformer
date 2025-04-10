@@ -31,7 +31,7 @@ public class PlayerWallSlideState : PlayerState
         else
             player.rb.linearVelocity = new Vector2(0, player.rb.linearVelocityY * 0.5f);
 
-        if (player.IsGrounded() || !player.OnWall())
-            stateMachine.ChangeState(player.idleState);
+        if (player.IsGrounded() || !player.OnWall() || horInput != player.facingDir)
+            stateMachine.ChangeState(player.airState);
     }
 }

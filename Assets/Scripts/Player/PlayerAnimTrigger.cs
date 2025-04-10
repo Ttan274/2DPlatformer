@@ -16,9 +16,7 @@ public class PlayerAnimTrigger : MonoBehaviour
         foreach (var c in coll)
         {
             if(c.GetComponent<Enemy>() != null)
-            {
                 c.GetComponent<Enemy>().DamageBehaviour(player.damage);
-            }
         }
     }
 }
