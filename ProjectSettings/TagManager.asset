@@ -6,7 +6,7 @@ TagManager:
   tags:
   - Enemy
   - EnemyTurret
-  - Gold
+  - Portal
   layers:
   - Default
   - TransparentFX

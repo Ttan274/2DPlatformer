@@ -3452,12 +3452,12 @@ TextureImporter:
       name: TX Village Props - Spike Ball
       rect:
         serializedVersion: 2
-        x: 868
+        x: 867
         y: 898
         width: 27
         height: 27
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.46424243, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []

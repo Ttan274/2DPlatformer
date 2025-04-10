@@ -18,6 +18,11 @@ public class Player : Entity
     [Header("Attack Parameters")]
     public Vector2 attackMovement;
 
+    [Header("Teleport Parameters")]
+    [SerializeField] private float teleportCooldown;
+    private GameObject currentPortal;
+    private float teleportCooldownTimer;
+
     //Busy
     public bool isBusy { get; private set; }
 
@@ -67,6 +72,18 @@ public class Player : Entity
         base.Update();
         stateMachine.currentState.Update();
         DashInputCheck();
+        TeleportInputCheck();
+    }
+
+    private void TeleportInputCheck()
+    {
+        teleportCooldownTimer -= Time.deltaTime;
+
+        if (Input.GetKeyDown(KeyCode.E) && currentPortal != null && teleportCooldownTimer <= 0)
+        {
+            transform.position = currentPortal.GetComponent<Portal>().GetTargetPortal().position;
+            teleportCooldownTimer = teleportCooldown;
+        }
     }
 
     private void DashInputCheck()
@@ -100,5 +117,17 @@ public class Player : Entity
     {
         base.Die();
         stateMachine.ChangeState(deadState);
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Portal"))
+            currentPortal = other.gameObject;
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("Portal") && other.gameObject == currentPortal)
+            currentPortal = null;
     }
 }
