@@ -54,7 +54,7 @@ public class Player : Entity
         dashState = new PlayerDashState(this, stateMachine, "Jump");                //animation might be change
         wallSlideState = new PlayerWallSlideState(this, stateMachine, "Jump");      //animation might be change
         wallJumpState = new PlayerWallJumpState(this, stateMachine, "Jump");
-        attackState = new PlayerAttackState(this, stateMachine, "Aim");
+        attackState = new PlayerAttackState(this, stateMachine, "Aim");             //new anim will be added and character will throw spear
         strikeState = new PlayerStrikeState(this, stateMachine, "Strike");
         deadState = new PlayerDeadState(this, stateMachine, "Die");
     }
@@ -75,6 +75,7 @@ public class Player : Entity
         TeleportInputCheck();
     }
 
+    #region OtherBehaviours
     private void TeleportInputCheck()
     {
         teleportCooldownTimer -= Time.deltaTime;
@@ -118,6 +119,7 @@ public class Player : Entity
         base.Die();
         stateMachine.ChangeState(deadState);
     }
+    #endregion
 
     private void OnTriggerEnter2D(Collider2D other)
     {
