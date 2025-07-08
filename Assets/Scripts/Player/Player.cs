@@ -27,6 +27,7 @@ public class Player : Entity
     [SerializeField] private float puzzleCooldown;
     private float puzzleCooldownTimer;
     private GameObject currentPuzzle;
+    public bool isInPuzzle = false;
 
     //Busy
     public bool isBusy { get; private set; }
@@ -75,8 +76,11 @@ public class Player : Entity
     protected override void Update()
     {
         base.Update();
-        stateMachine.currentState.Update();
-        DashInputCheck();
+        if(!isInPuzzle)
+        {
+            stateMachine.currentState.Update();
+            DashInputCheck();
+        }
         InputCheck();
     }
 
@@ -92,9 +96,10 @@ public class Player : Entity
             teleportCooldownTimer = teleportCooldown;
         }
 
-        if (Input.GetKeyDown(KeyCode.E) && currentPuzzle != null && puzzleCooldown <= 0)
+        if (Input.GetKeyDown(KeyCode.E) && currentPuzzle != null && puzzleCooldown <= 0 && !isInPuzzle)
         {
             stateMachine.ChangeState(idleState);
+            isInPuzzle = true;
             currentPuzzle.GetComponent<Puzzle>().StartPuzzleSystem();
         }
     }
@@ -131,6 +136,8 @@ public class Player : Entity
         base.Die();
         stateMachine.ChangeState(deadState);
     }
+    
+    public void ResetPuzzle() => isInPuzzle = false;
     #endregion
 
     private void OnTriggerEnter2D(Collider2D other)

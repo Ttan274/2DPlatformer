@@ -7,5 +7,6 @@ public class Puzzle : MonoBehaviour
     public void StartPuzzleSystem()
     {
         puzzleSystem.StartPuzzle();
+        Destroy(gameObject);
     }
 }

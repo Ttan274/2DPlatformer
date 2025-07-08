@@ -135,5 +135,6 @@ public class PuzzleSystem : MonoBehaviour
     private void FinishGame()
     {
         field.gameObject.SetActive(false);
+        PlayerManager.instance.player.ResetPuzzle();
     }
 }
