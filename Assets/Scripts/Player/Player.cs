@@ -23,6 +23,11 @@ public class Player : Entity
     private GameObject currentPortal;
     private float teleportCooldownTimer;
 
+    [Header("Puzzle Parameters")]
+    [SerializeField] private float puzzleCooldown;
+    private float puzzleCooldownTimer;
+    private GameObject currentPuzzle;
+
     //Busy
     public bool isBusy { get; private set; }
 
@@ -72,18 +77,25 @@ public class Player : Entity
         base.Update();
         stateMachine.currentState.Update();
         DashInputCheck();
-        TeleportInputCheck();
+        InputCheck();
     }
 
     #region OtherBehaviours
-    private void TeleportInputCheck()
+    private void InputCheck()
     {
         teleportCooldownTimer -= Time.deltaTime;
+        puzzleCooldown -= Time.deltaTime;
 
         if (Input.GetKeyDown(KeyCode.E) && currentPortal != null && teleportCooldownTimer <= 0)
         {
             transform.position = currentPortal.GetComponent<Portal>().GetTargetPortal().position;
             teleportCooldownTimer = teleportCooldown;
+        }
+
+        if (Input.GetKeyDown(KeyCode.E) && currentPuzzle != null && puzzleCooldown <= 0)
+        {
+            stateMachine.ChangeState(idleState);
+            currentPuzzle.GetComponent<Puzzle>().StartPuzzleSystem();
         }
     }
 
@@ -125,11 +137,17 @@ public class Player : Entity
     {
         if (other.CompareTag("Portal"))
             currentPortal = other.gameObject;
+
+        if (other.CompareTag("Puzzle"))
+            currentPuzzle = other.gameObject;
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
         if (other.CompareTag("Portal") && other.gameObject == currentPortal)
             currentPortal = null;
+
+        if (other.CompareTag("Puzzle") && other.gameObject == currentPuzzle)
+            currentPuzzle = null;
     }
 }

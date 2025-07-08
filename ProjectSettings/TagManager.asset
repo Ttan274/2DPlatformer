@@ -8,6 +8,7 @@ TagManager:
   - EnemyTurret
   - Portal
   - Ladder
+  - Puzzle
   layers:
   - Default
   - TransparentFX
