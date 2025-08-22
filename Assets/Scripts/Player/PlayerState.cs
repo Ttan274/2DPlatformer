@@ -1,6 +1,6 @@
 using UnityEngine;
 
-//Base class for the states of player (e.g MoveState, IdleState, ...)
+//Base class for the states of player
 public class PlayerState
 {
     //References to other components

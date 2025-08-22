@@ -25,7 +25,6 @@ public class Player : Entity
 
     [Header("Puzzle Parameters")]
     [SerializeField] private float puzzleCooldown;
-    private float puzzleCooldownTimer;
     private GameObject currentPuzzle;
     public bool isInPuzzle = false;
 
@@ -143,18 +142,30 @@ public class Player : Entity
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Portal"))
+        {
             currentPortal = other.gameObject;
+            MessageBar.instance.ShowMessage("Press E to teleport");
+        }
 
         if (other.CompareTag("Puzzle"))
+        {
             currentPuzzle = other.gameObject;
+            MessageBar.instance.ShowMessage("Press E to start puzzle");
+        }
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
         if (other.CompareTag("Portal") && other.gameObject == currentPortal)
+        {
             currentPortal = null;
+            MessageBar.instance.CloseMessageBar();
+        }
 
         if (other.CompareTag("Puzzle") && other.gameObject == currentPuzzle)
+        {
             currentPuzzle = null;
+            MessageBar.instance.CloseMessageBar();
+        }
     }
 }
